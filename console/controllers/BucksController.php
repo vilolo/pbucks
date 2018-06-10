@@ -145,7 +145,7 @@ class BucksController extends Controller
             }
         }
 
-        return $cur_trade_info->ticker;
+        return $cur_trade_info;
     }
 
     //返回是否需要平仓
