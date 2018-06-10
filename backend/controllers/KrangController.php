@@ -30,7 +30,7 @@ class KrangController extends Controller
 
         //获取用户信息
         $params = array('api_key' => self::API_KEY);
-        $result = $client -> userinfoApi($params);
+        $result = $client -> fixUserinfoFutureApi($params);
         print_r($result);
     }
 }

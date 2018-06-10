@@ -70,7 +70,7 @@ class OKCoin_Rpc {
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
 		curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-echo "====".$url."====";
+
 		// $curlOpts[CURLOPT_URL] = substr(OKCoinBase::WEB_BASE, 0, -1) . $url;
 		// $curlOpts[CURLOPT_HTTPHEADER] = $headers;
 		// $curlOpts[CURLOPT_SSL_VERIFYHOST] = FALSE;
