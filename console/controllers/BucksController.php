@@ -52,6 +52,7 @@ class BucksController extends Controller
 
     public function actionIndex()
     {
+        print_r(time().'==');
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
 
         //控制访问频率，0.5秒一次
