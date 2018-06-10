@@ -31,7 +31,7 @@ class OKCoin extends \OKCoinBase {
 	
 	//获取用户信息
 	public function userinfoApi($params = null) {
-		return $this -> post("/api/v1/userinfo.do", $params);
+		return $this -> post("/api/v1/future_userinfo.do", $params);
 	}
 
 	//下单交易

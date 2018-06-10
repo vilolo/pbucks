@@ -27,5 +27,10 @@ class KrangController extends Controller
         $params = array('symbol' => self::SYMBOL, 'contract_type' => self::CONTRACT_TYPE);
         $result = $client -> tickerApi($params);
         print_r($result);
+
+        //获取用户信息
+        $params = array('api_key' => self::API_KEY);
+        $result = $client -> userinfoApi($params);
+        print_r($result);
     }
 }
