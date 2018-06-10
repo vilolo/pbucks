@@ -54,7 +54,7 @@ class KrangController extends Controller
         $params = array('api_key' => $this->api_key);
         $result = $client -> fixUserinfoFutureApi($params);
         if ($result->info){
-            //$result = $result->info->ltb;
+            $result = $result->info->ltc;
         }
         print_r($result);
 
