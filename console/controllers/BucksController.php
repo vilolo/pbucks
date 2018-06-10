@@ -66,12 +66,15 @@ class BucksController extends Controller
                 if ($sys_config){
                     //if (!$sys_config[0] || $sys_config[0]['name'] != 'is_run' || $sys_config[0]['value'] != 1){
                     if ($sys_config[0]['value'] != 1){
+                        var_dump("1&");
                         continue;
                     }
                 }
 
                 $account_info = $this->_account_info($client);
+                print_r($account_info);
                 if (!$account_info){
+                    var_dump("2&");
                     continue;
                 }
 
