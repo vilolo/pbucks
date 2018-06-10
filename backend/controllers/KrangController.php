@@ -54,7 +54,7 @@ class KrangController extends Controller
         $params = array('api_key' => $this->api_key);
         $result = $client -> fixUserinfoFutureApi($params);
         if ($result->info){
-            $result = $result->info->$this->coin_type;
+            $result = $result->info->ltb;
         }
         print_r($result);
 
