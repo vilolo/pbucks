@@ -244,7 +244,7 @@ class BucksController extends Controller
         $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol, 'contract_type' => $this->contract_type, 'type' => 1);
         $result = $client -> singleBondPositionFutureApi($params);
 
-        return $result['holding'][0]??null;
+        return $result->holding[0]??null;
     }
 
     private function _make_queue($data)
