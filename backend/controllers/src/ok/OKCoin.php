@@ -36,7 +36,7 @@ class OKCoin extends \OKCoinBase {
 
 	//下单交易
 	public function tradeApi($params = null) {
-		return $this -> post("/api/v1/trade.do", $params);
+		return $this -> post("/api/v1/future_trade.do", $params);
 	}
 
 	//批量下单
