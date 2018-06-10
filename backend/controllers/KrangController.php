@@ -59,7 +59,7 @@ class KrangController extends Controller
         print_r($result);
 
         //逐仓用户持仓查询
-        $params = array('api_key' => $this->api_key, 'symbol' => 'btc_usd', 'contract_type' => 'this_week', 'type' => 1);
+        $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol, 'contract_type' => 'this_week', 'type' => 1);
         $result = $client -> singleBondPositionFutureApi($params);
         print_r($result);
     }
