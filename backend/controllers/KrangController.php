@@ -53,8 +53,8 @@ class KrangController extends Controller
 //        rights:账户权益
         $params = array('api_key' => $this->api_key);
         $result = $client -> fixUserinfoFutureApi($params);
-        if ($result['info']){
-            $result = $result['info'][$this->coin_type];
+        if ($result->info){
+            $result = $result->info[$this->coin_type];
         }
         print_r($result);
 
