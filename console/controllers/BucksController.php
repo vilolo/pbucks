@@ -52,11 +52,11 @@ class BucksController extends Controller
 
     public function actionIndex()
     {
-        print_r(time().'==');
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
 
         //控制访问频率，0.5秒一次
         while (true){
+            print_r(time().'==');
             try{
                 $data = [];
                 usleep(500000);     //后期可以根据不同接口错开睡眠时间
