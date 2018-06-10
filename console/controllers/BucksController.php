@@ -213,7 +213,7 @@ class BucksController extends Controller
         $params = array('api_key' => $this->api_key,
             'symbol' => $this->symbol,
             'contract_type' => $this->contract_type,
-            'type' => $type,
+            'type' => (string)$type,
             'price' => $price,
             'amount' => "1");
         $result = $client -> tradeApi($params);
