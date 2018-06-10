@@ -210,10 +210,12 @@ class BucksController extends Controller
             print_r("下空单");
         }
 
-        $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
+        $params = array('api_key' => $this->api_key,
+            'symbol' => $this->symbol,
+            'contract_type' => $this->contract_type,
             'type' => $type,
             'price' => $price,
-            'amount' => 1);
+            'amount' => "1");
         $result = $client -> tradeApi($params);
         var_dump($result);
     }
