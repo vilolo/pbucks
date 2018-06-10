@@ -72,11 +72,6 @@ class BucksController extends Controller
                 }
 
                 $account_info = $this->_account_info($client);
-                print_r($account_info);
-                if (!$account_info){
-                    var_dump("2&");
-                    continue;
-                }
 
                 //处理未完成订单
                 $this->_handle_unfinish_order($client);
@@ -121,34 +116,36 @@ class BucksController extends Controller
                 //是超过就割肉
             //判断当前手上交易的合约是否盈利超过某个值（8%）
                 //是则获利了结
-        $arr = $this->_handle_order_plain_a($account_info);
 
         //获取OKCoin行情（盘口数据）
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
 
-        if ($arr[self::BUY_TYPE][0] == 1 && $arr[self::BUY_TYPE][1] > 0){
-            $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
-                'type' => self::TRADE_CLOSE_BUY,
-                'price' => $cur_trade_info->ticker->sell,
-                'amount' => $arr[self::BUY_TYPE][1]);
-            $result = $client -> tradeApi($params);
-            print_r("平多单");
-            var_dump($result);
-        }
+        if ($account_info){
+            $arr = $this->_handle_order_plain_a($account_info);
 
-        if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
-            $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
-                'type' => self::TRADE_CLOSE_SEAL,
-                'price' => $cur_trade_info->ticker->buy,
-                'amount' => $arr[self::SEAL_TYPE][1]);
-            $result = $client -> tradeApi($params);
-            print_r("平空单");
-            var_dump($result);
+            if ($arr[self::BUY_TYPE][0] == 1 && $arr[self::BUY_TYPE][1] > 0){
+                $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
+                    'type' => self::TRADE_CLOSE_BUY,
+                    'price' => $cur_trade_info->ticker->sell,
+                    'amount' => $arr[self::BUY_TYPE][1]);
+                $result = $client -> tradeApi($params);
+                print_r("平多单");
+                var_dump($result);
+            }
+
+            if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
+                $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
+                    'type' => self::TRADE_CLOSE_SEAL,
+                    'price' => $cur_trade_info->ticker->buy,
+                    'amount' => $arr[self::SEAL_TYPE][1]);
+                $result = $client -> tradeApi($params);
+                print_r("平空单");
+                var_dump($result);
+            }
         }
 
         return $cur_trade_info->ticker;
-
     }
 
     //返回是否需要平仓
