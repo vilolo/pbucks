@@ -21,7 +21,7 @@ class BucksController extends Controller
     const SEAL_TYPE = 2;
 
     const WIN_PERCENT = 8; //盈利10%平仓
-    const LOST_PERCENT = 20;    //亏损20%出局
+    const LOST_PERCENT = -20;    //亏损20%出局
 
     const TRADE_OPEN_BUY = 1;
     const TRADE_OPEN_SEAL = 2;
@@ -125,7 +125,9 @@ class BucksController extends Controller
             $arr = $this->_handle_order_plain_a($account_info);
 
             if ($arr[self::BUY_TYPE][0] == 1 && $arr[self::BUY_TYPE][1] > 0){
-                $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
+                $params = array('api_key' => $this->api_key,
+                    'symbol' => $this->symbol,
+                    'contract_type' => $this->contract_type,
                     'type' => self::TRADE_CLOSE_BUY,
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
@@ -135,7 +137,9 @@ class BucksController extends Controller
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
-                $params = array('api_key' => $this->api_key, 'symbol' => $this->symbol,
+                $params = array('api_key' => $this->api_key,
+                    'symbol' => $this->symbol,
+                    'contract_type' => $this->contract_type,
                     'type' => self::TRADE_CLOSE_SEAL,
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
