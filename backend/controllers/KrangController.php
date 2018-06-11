@@ -19,6 +19,7 @@ class KrangController extends Controller
     private $contract_type = "";
     private $symbol = "";
     private $coin_type = "";
+    private $max_queue = "";
 
     function init()
     {
@@ -28,6 +29,7 @@ class KrangController extends Controller
         $this->contract_type = Yii::$app->params['contract_type'];
         $this->symbol = Yii::$app->params['symbol'];
         $this->coin_type = Yii::$app->params['coin_type'];
+        $this->max_queue = Yii::$app->params['max_queue'];
     }
 
     public $tlist = [];
