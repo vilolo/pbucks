@@ -56,7 +56,7 @@ class KrangController extends Controller
 
             $tmp['time'] = $cur_trade_info->date;
             $tmp['cur_price'] = $cur_trade_info->ticker->last;
-            $tmp['d_value'] = $cur_trade_info->ticker->last - end($data)['cur_price'];
+            $tmp['d_value'] = $cur_trade_info->ticker->last - end($this->tlist)['cur_price'];
 
             $this->_make_queue($tmp);
             $i--;
