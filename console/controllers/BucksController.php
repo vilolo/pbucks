@@ -118,6 +118,8 @@ class BucksController extends Controller
             //判断当前手上交易的合约是否盈利超过某个值（8%）
                 //是则获利了结
 
+        //方案三：根据保存的行情数据，判断是否单边，如果是是否需要加仓或其他止损
+
         //获取OKCoin行情（盘口数据）
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
@@ -144,7 +146,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('1', date("YmdHis：")."pb---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('1', date("YmdHis：")."ps---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
 //                print_r("平空单");
 //                var_dump($result);
             }
