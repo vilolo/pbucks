@@ -20,7 +20,7 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 8; //盈利10%平仓
+    const WIN_PERCENT = 2; //盈利10%平仓
     const LOST_PERCENT = -20;    //亏损20%出局
 
     const TRADE_OPEN_BUY = 1;
