@@ -56,7 +56,7 @@ class BucksController extends Controller
 
         //控制访问频率，0.5秒一次
         while (true){
-            print_r(time().'==');
+            //print_r(time().'==');
             try{
                 $data = [];
                 usleep(500000);     //后期可以根据不同接口错开睡眠时间
@@ -66,7 +66,7 @@ class BucksController extends Controller
                 if ($sys_config){
                     //if (!$sys_config[0] || $sys_config[0]['name'] != 'is_run' || $sys_config[0]['value'] != 1){
                     if ($sys_config[0]['value'] != 1){
-                        var_dump("1&");
+                        //var_dump("1&");
                         continue;
                     }
                 }
@@ -91,7 +91,8 @@ class BucksController extends Controller
                 //保存数据到队列
                 $this->_make_queue($data);
             }catch (Exception $e){
-                print_r($e->getMessage());
+                //print_r($e->getMessage());
+                file_put_contents('1', date("YmdHis：").$e->getMessage().PHP_EOL, 8);
             }
         }
     }
@@ -131,9 +132,8 @@ class BucksController extends Controller
                     'type' => self::TRADE_CLOSE_BUY,
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
-                $result = $client -> tradeApi($params);
-                print_r("平多单");
-                var_dump($result);
+                $client -> tradeApi($params);
+                file_put_contents('1', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
@@ -143,9 +143,10 @@ class BucksController extends Controller
                     'type' => self::TRADE_CLOSE_SEAL,
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
-                $result = $client -> tradeApi($params);
-                print_r("平空单");
-                var_dump($result);
+                $client -> tradeApi($params);
+                file_put_contents('1', date("YmdHis：")."pb---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
+//                print_r("平空单");
+//                var_dump($result);
             }
         }
 
@@ -156,11 +157,12 @@ class BucksController extends Controller
     private function _handle_order_plain_a($account_info)
     {
         //[0, 0] : 第一个值为是否平仓，第二个值为平仓数量
-        $arr = [self::BUY_TYPE =>[0, 0], self::SEAL_TYPE => [0, 0]];
+        $arr = [self::BUY_TYPE =>[0, 0, 0], self::SEAL_TYPE => [0, 0, 0]];
         if ($account_info->buy_profit_lossratio > self::WIN_PERCENT){
             //盈利
             $arr[self::BUY_TYPE][0] = 1;
             $arr[self::BUY_TYPE][1] = $account_info->buy_amount;
+            $arr[self::BUY_TYPE][2] = 1;
         }elseif($account_info->buy_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::BUY_TYPE][0] = 1;
@@ -171,6 +173,7 @@ class BucksController extends Controller
             //盈利
             $arr[self::SEAL_TYPE][0] = 1;
             $arr[self::SEAL_TYPE][1] = $account_info->sell_amount;
+            $arr[self::SEAL_TYPE][2] = 1;
         }elseif($account_info->sell_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::SEAL_TYPE][0] = 1;
@@ -208,11 +211,13 @@ class BucksController extends Controller
         if (($buy + $sale) > 0){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
-            print_r("下多单");
+            //print_r("下多单");
+            file_put_contents('1', date("YmdHis：")."bb".PHP_EOL, 8);
         }else{
             $type = self::TRADE_OPEN_SEAL;
             $price = $cur_data->ticker->buy;
-            print_r("下空单");
+            //print_r("下空单");
+            file_put_contents('1', date("YmdHis：")."bs".PHP_EOL, 8);
         }
 
         $params = array('api_key' => $this->api_key,
@@ -222,7 +227,7 @@ class BucksController extends Controller
             'price' => $price,
             'amount' => "1");
         $result = $client -> tradeApi($params);
-        var_dump($result);
+        //var_dump($result);
     }
 
     private function _account_info(OKCoin $client)
