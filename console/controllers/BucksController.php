@@ -94,7 +94,7 @@ class BucksController extends Controller
                 $this->_make_queue($data);
             }catch (Exception $e){
                 //print_r($e->getMessage());
-                file_put_contents('1', date("YmdHis：").$e->getMessage().PHP_EOL, 8);
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：").$e->getMessage().PHP_EOL, 8);
             }
         }
     }
@@ -137,7 +137,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('1', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('log/'.date("Ym`d").'.txt', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
@@ -148,7 +148,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('1', date("YmdHis：")."ps---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."ps---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
 //                print_r("平空单");
 //                var_dump($result);
             }
@@ -220,12 +220,12 @@ class BucksController extends Controller
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
             //print_r("下多单");
-            file_put_contents('1', date("YmdHis：")."bb".PHP_EOL, 8);
+            file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."bb".PHP_EOL, 8);
         }else{
             $type = self::TRADE_OPEN_SEAL;
             $price = $cur_data->ticker->buy;
             //print_r("下空单");
-            file_put_contents('1', date("YmdHis：")."bs".PHP_EOL, 8);
+            file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."bs".PHP_EOL, 8);
         }
 
         $params = array('api_key' => $this->api_key,
