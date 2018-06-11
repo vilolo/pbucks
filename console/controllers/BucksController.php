@@ -204,6 +204,7 @@ class BucksController extends Controller
             }
         }
 
+        print_r("<<<".$buy."==".$sale.">>>");
         if (($buy + $sale) > 0){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
