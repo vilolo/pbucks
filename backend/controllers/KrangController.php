@@ -19,6 +19,7 @@ class KrangController extends Controller
     private $contract_type = "";
     private $symbol = "";
     private $coin_type = "";
+    private $max_queue = "";
 
     function init()
     {
@@ -28,6 +29,17 @@ class KrangController extends Controller
         $this->contract_type = Yii::$app->params['contract_type'];
         $this->symbol = Yii::$app->params['symbol'];
         $this->coin_type = Yii::$app->params['coin_type'];
+        $this->max_queue = Yii::$app->params['max_queue'];
+    }
+
+    public $tlist = [];
+    private function _make_queue($data)
+    {
+        //$data = ['当前时间', '当前价格', '减去上一次所得的值']
+        $this->tlist[] = $data;
+        if (count($this->tlist) > $this->max_queue){
+            array_shift($this->tlist);
+        }
     }
 
     public function actionIndex()
@@ -35,10 +47,26 @@ class KrangController extends Controller
         //OKCoin DEMO 入口
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
 
-        //获取OKCoin行情（盘口数据）
-        $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
-        $result = $client -> tickerApi($params);
-        print_r($result);
+        $i = 50;
+        while ($i > 0){
+            $tmp = [];
+            usleep(500000);
+
+            //获取OKCoin行情（盘口数据）
+            $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
+            $cur_trade_info = $client -> tickerApi($params);
+
+            $tmp['time'] = $cur_trade_info->date;
+            $tmp['cur_price'] = $cur_trade_info->ticker->last;
+            $tmp['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
+
+            $this->_make_queue($tmp);
+            $i--;
+        }
+
+        print_r($this->tlist);
+
+        die("ok");
 
         //获取用户信息
 //        balance:账户余额

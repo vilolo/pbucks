@@ -20,7 +20,7 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 8; //盈利10%平仓
+    const WIN_PERCENT = 2; //盈利10%平仓
     const LOST_PERCENT = -20;    //亏损20%出局
 
     const TRADE_OPEN_BUY = 1;
@@ -56,7 +56,7 @@ class BucksController extends Controller
 
         //控制访问频率，0.5秒一次
         while (true){
-            print_r(time().'==');
+            //print_r(time().'==');
             try{
                 $data = [];
                 usleep(500000);     //后期可以根据不同接口错开睡眠时间
@@ -66,7 +66,7 @@ class BucksController extends Controller
                 if ($sys_config){
                     //if (!$sys_config[0] || $sys_config[0]['name'] != 'is_run' || $sys_config[0]['value'] != 1){
                     if ($sys_config[0]['value'] != 1){
-                        var_dump("1&");
+                        //var_dump("1&");
                         continue;
                     }
                 }
@@ -81,10 +81,10 @@ class BucksController extends Controller
 
                 $data['time'] = $cur_trade_info->date;
                 $data['cur_price'] = $cur_trade_info->ticker->last;
-                $data['d_value'] = $cur_trade_info->ticker->last - end($this->tlist)['cur_price'];
+                $data['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
 
                 //这个地方判断要加未完成的单
-                if ($sys_config[1]['value'] == 1 && ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount){
+                if ($sys_config[1]['value'] == 1 && (!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount) ){
                     //判断是否需要下单
                     $this->_create_order($client, $cur_trade_info);
                 }
@@ -92,7 +92,8 @@ class BucksController extends Controller
                 //保存数据到队列
                 $this->_make_queue($data);
             }catch (Exception $e){
-                print_r($e->getMessage());
+                //print_r($e->getMessage());
+                file_put_contents('1', date("YmdHis：").$e->getMessage().PHP_EOL, 8);
             }
         }
     }
@@ -118,6 +119,8 @@ class BucksController extends Controller
             //判断当前手上交易的合约是否盈利超过某个值（8%）
                 //是则获利了结
 
+        //方案三：根据保存的行情数据，判断是否单边，如果是是否需要加仓或其他止损
+
         //获取OKCoin行情（盘口数据）
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
@@ -132,9 +135,8 @@ class BucksController extends Controller
                     'type' => self::TRADE_CLOSE_BUY,
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
-                $result = $client -> tradeApi($params);
-                print_r("平多单");
-                var_dump($result);
+                $client -> tradeApi($params);
+                file_put_contents('1', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
@@ -144,9 +146,10 @@ class BucksController extends Controller
                     'type' => self::TRADE_CLOSE_SEAL,
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
-                $result = $client -> tradeApi($params);
-                print_r("平空单");
-                var_dump($result);
+                $client -> tradeApi($params);
+                file_put_contents('1', date("YmdHis：")."ps---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
+//                print_r("平空单");
+//                var_dump($result);
             }
         }
 
@@ -157,11 +160,12 @@ class BucksController extends Controller
     private function _handle_order_plain_a($account_info)
     {
         //[0, 0] : 第一个值为是否平仓，第二个值为平仓数量
-        $arr = [self::BUY_TYPE =>[0, 0], self::SEAL_TYPE => [0, 0]];
+        $arr = [self::BUY_TYPE =>[0, 0, 0], self::SEAL_TYPE => [0, 0, 0]];
         if ($account_info->buy_profit_lossratio > self::WIN_PERCENT){
             //盈利
             $arr[self::BUY_TYPE][0] = 1;
             $arr[self::BUY_TYPE][1] = $account_info->buy_amount;
+            $arr[self::BUY_TYPE][2] = 1;
         }elseif($account_info->buy_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::BUY_TYPE][0] = 1;
@@ -172,6 +176,7 @@ class BucksController extends Controller
             //盈利
             $arr[self::SEAL_TYPE][0] = 1;
             $arr[self::SEAL_TYPE][1] = $account_info->sell_amount;
+            $arr[self::SEAL_TYPE][2] = 1;
         }elseif($account_info->sell_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::SEAL_TYPE][0] = 1;
@@ -205,15 +210,17 @@ class BucksController extends Controller
             }
         }
 
-        print_r("<<<".$buy."==".$sale.">>>");
+        //可以判断他们的比例，然后根据比例给个随机数
         if (($buy + $sale) > 0){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
-            print_r("下多单");
+            //print_r("下多单");
+            file_put_contents('1', date("YmdHis：")."bb".PHP_EOL, 8);
         }else{
             $type = self::TRADE_OPEN_SEAL;
             $price = $cur_data->ticker->buy;
-            print_r("下空单");
+            //print_r("下空单");
+            file_put_contents('1', date("YmdHis：")."bs".PHP_EOL, 8);
         }
 
         $params = array('api_key' => $this->api_key,
@@ -223,7 +230,7 @@ class BucksController extends Controller
             'price' => $price,
             'amount' => "1");
         $result = $client -> tradeApi($params);
-        var_dump($result);
+        //var_dump($result);
     }
 
     private function _account_info(OKCoin $client)
