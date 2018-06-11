@@ -20,7 +20,7 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 2; //盈利10%平仓
+    const WIN_PERCENT = 8; //盈利10%平仓
     const LOST_PERCENT = -20;    //亏损20%出局
 
     const TRADE_OPEN_BUY = 1;
@@ -37,6 +37,7 @@ class BucksController extends Controller
     private $max_queue = "";
 
     private $tlist = [];
+    private $is_start = false;  //每次启动使，先获取部分数据
 
     function init()
     {
@@ -196,7 +197,10 @@ class BucksController extends Controller
 
         //可以添加随机比例，然后看下做多做空
 
-        if (count($this->tlist) < 20){
+        if (!$this->is_start){
+            if (count($this->tlist) > 20){
+                $this->is_start = true;
+            }
             return ;
         }
 
@@ -211,7 +215,8 @@ class BucksController extends Controller
         }
 
         //可以判断他们的比例，然后根据比例给个随机数
-        if (($buy + $sale) > 0){
+        $c = (10000*$buy - 10000*$sale);
+        if (rand(0, $c) < $buy){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
             //print_r("下多单");
