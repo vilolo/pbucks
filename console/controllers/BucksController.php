@@ -81,7 +81,7 @@ class BucksController extends Controller
 
                 $data['time'] = $cur_trade_info->date;
                 $data['cur_price'] = $cur_trade_info->ticker->last;
-                $data['d_value'] = $cur_trade_info->ticker->last - end($this->tlist)['cur_price'];
+                $data['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
 
                 if ($sys_config[1]['value'] == 1 && ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount){
                     //判断是否需要下单

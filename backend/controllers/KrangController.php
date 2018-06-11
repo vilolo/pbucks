@@ -47,10 +47,10 @@ class KrangController extends Controller
         //OKCoin DEMO 入口
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
 
-        $i = 10;
+        $i = 50;
         while ($i > 0){
             $tmp = [];
-            sleep(1);
+            usleep(500000);
 
             //获取OKCoin行情（盘口数据）
             $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
@@ -58,7 +58,7 @@ class KrangController extends Controller
 
             $tmp['time'] = $cur_trade_info->date;
             $tmp['cur_price'] = $cur_trade_info->ticker->last;
-            $tmp['d_value'] = $cur_trade_info->ticker->last - end($this->tlist)['cur_price'];
+            $tmp['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
 
             $this->_make_queue($tmp);
             $i--;
