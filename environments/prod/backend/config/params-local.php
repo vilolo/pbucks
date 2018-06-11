@@ -5,6 +5,6 @@ return [
     'contract_type' => "this_week",
     'symbol' => "ltc_usd",
     'coin_type' => 'ltc',
-    'max_amount' => '10',   //最大交易张数
+    'max_amount' => '2',   //最大交易张数
     'max_queue' => '50',   //最大保存的队列
 ];

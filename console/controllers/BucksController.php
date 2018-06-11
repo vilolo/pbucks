@@ -204,7 +204,7 @@ class BucksController extends Controller
             }
         }
 
-        print_r("<<<".$buy."==".$sale.">>>");
+        //可以判断他们的比例，然后根据比例给个随机数
         if (($buy + $sale) > 0){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
