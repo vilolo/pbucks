@@ -97,6 +97,8 @@ class BucksController extends Controller
             }catch (Exception $e){
                 //print_r($e->getMessage());
                 file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：").$e->getMessage().PHP_EOL, 8);
+            }catch (\OKCoin_Exception $oke){
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：").$oke->getMessage().PHP_EOL, 8);
             }
         }
     }
