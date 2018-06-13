@@ -23,6 +23,8 @@ class BucksController extends Controller
     const WIN_PERCENT = 8; //盈利10%平仓
     const LOST_PERCENT = -20;    //亏损20%出局
 
+    const AVAILABLE_TRADE_PERCENT = 50;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
+
     const TRADE_OPEN_BUY = 1;
     const TRADE_OPEN_SEAL = 2;
     const TRADE_CLOSE_BUY = 3;
@@ -33,7 +35,7 @@ class BucksController extends Controller
     private $contract_type = "";
     private $symbol = "";
     private $coin_type = "";
-    private $max_amount = "";
+    //private $max_amount = "";
     private $max_queue = "";
 
     private $tlist = [];
@@ -47,7 +49,7 @@ class BucksController extends Controller
         $this->contract_type = Yii::$app->params['contract_type'];
         $this->symbol = Yii::$app->params['symbol'];
         $this->coin_type = Yii::$app->params['coin_type'];
-        $this->max_amount = Yii::$app->params['max_amount'];
+        //$this->max_amount = Yii::$app->params['max_amount'];
         $this->max_queue = Yii::$app->params['max_queue'];
     }
 
@@ -137,7 +139,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('log/'.date("Ym`d").'.txt', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){

@@ -47,26 +47,25 @@ class KrangController extends Controller
         //OKCoin DEMO 入口
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
 
-        $i = 50;
-        while ($i > 0){
-            $tmp = [];
-            usleep(500000);
+//        $i = 50;
+//        while ($i > 0){
+//            $tmp = [];
+//            usleep(500000);
+//
+//            //获取OKCoin行情（盘口数据）
+//            $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
+//            $cur_trade_info = $client -> tickerApi($params);
+//
+//            $tmp['time'] = $cur_trade_info->date;
+//            $tmp['cur_price'] = $cur_trade_info->ticker->last;
+//            $tmp['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
+//
+//            $this->_make_queue($tmp);
+//            $i--;
+//        }
+//
+//        print_r($this->tlist);
 
-            //获取OKCoin行情（盘口数据）
-            $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
-            $cur_trade_info = $client -> tickerApi($params);
-
-            $tmp['time'] = $cur_trade_info->date;
-            $tmp['cur_price'] = $cur_trade_info->ticker->last;
-            $tmp['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
-
-            $this->_make_queue($tmp);
-            $i--;
-        }
-
-        print_r($this->tlist);
-
-        die("ok");
 
         //获取用户信息
 //        balance:账户余额
