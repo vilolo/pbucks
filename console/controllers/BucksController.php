@@ -92,11 +92,14 @@ class BucksController extends Controller
                     //判断是否需要下单
                     $params = array('api_key' => $this->api_key);
                     $result = $client -> fixUserinfoFutureApi($params);
-                    print_r($result);
                     if ($result->info){
                         $use_info = $result->info->ltc;
-                        if ($use_info->contracts[0]->bond/$use_info->balance < 0.5){
+                        if (!$use_info->contracts){
                             $this->_create_order($client, $cur_trade_info);
+                        }else{
+                            if ($use_info->contracts[0]->bond/$use_info->balance < 0.5){
+                                $this->_create_order($client, $cur_trade_info);
+                            }
                         }
                     }elseif(!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount){
                         $this->_create_order($client, $cur_trade_info);
