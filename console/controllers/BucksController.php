@@ -21,7 +21,7 @@ class BucksController extends Controller
     const SEAL_TYPE = 2;
 
     const WIN_PERCENT = 8; //盈利10%平仓
-    const LOST_PERCENT = -20;    //亏损20%出局
+    const LOST_PERCENT = -10;    //亏损20%出局
 
     const AVAILABLE_TRADE_PERCENT = 50;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
 
@@ -87,9 +87,19 @@ class BucksController extends Controller
                 $data['d_value'] = end($this->tlist)['cur_price']?($cur_trade_info->ticker->last - end($this->tlist)['cur_price']):0;
 
                 //这个地方判断要加未完成的单
-                if ($sys_config[1]['value'] == 1 && (!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount) ){
+                //if ($sys_config[1]['value'] == 1 && (!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount) ){
+                if ($sys_config[1]['value'] == 1){
                     //判断是否需要下单
-                    $this->_create_order($client, $cur_trade_info);
+                    $params = array('api_key' => $this->api_key);
+                    $result = $client -> fixUserinfoFutureApi($params);
+                    if ($result->info){
+                        $use_info = $result->info->ltc;
+                        if ($use_info->contracts[0]->balance/$use_info->rights < 0.5){
+                            $this->_create_order($client, $cur_trade_info);
+                        }
+                    }elseif(!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount){
+                        $this->_create_order($client, $cur_trade_info);
+                    }
                 }
 
                 //保存数据到队列
@@ -220,7 +230,7 @@ class BucksController extends Controller
 
         //可以判断他们的比例，然后根据比例给个随机数
         $c = (10000*$buy - 10000*$sale);
-        if (rand(0, $c) < $buy){
+        if (rand(0, $c) < 10000*$buy){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
             //print_r("下多单");
