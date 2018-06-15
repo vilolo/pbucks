@@ -90,10 +90,19 @@ class BucksController extends Controller
                 //if ($sys_config[1]['value'] == 1 && (!$account_info || ($account_info->buy_amount+$account_info->sell_amount)<=$this->max_amount) ){
                 if ($sys_config[1]['value'] == 1){
                     //判断是否需要下单
+
+                    print_r("@@@".PHP_EOL);
+
                     $params = array('api_key' => $this->api_key);
                     $result = $client -> fixUserinfoFutureApi($params);
+                    print_r($result->info);
                     if ($result->info){
+
+                        print_r("))))))".PHP_EOL);
+
                         $use_info = $result->info->ltc;
+                        print_r($use_info->contracts[0]->balance."))))))".PHP_EOL);
+                        print_r($use_info->rights."))))))".PHP_EOL);
                         if ($use_info->contracts[0]->balance/$use_info->rights < 0.5){
                             $this->_create_order($client, $cur_trade_info);
                         }
