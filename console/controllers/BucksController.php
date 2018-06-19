@@ -20,8 +20,8 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 8; //盈利10%平仓
-    const LOST_PERCENT = -10;    //亏损20%出局
+    const WIN_PERCENT = 10; //盈利10%平仓
+    const LOST_PERCENT = -8;    //亏损20%出局
 
     const AVAILABLE_TRADE_PERCENT = 50;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
 
@@ -234,7 +234,7 @@ class BucksController extends Controller
 
         //可以判断他们的比例，然后根据比例给个随机数
         $c = (10000*$buy - 10000*$sale);
-        if (rand(0, $c) < 10000*$buy){
+        if (rand(0, $c) > 10000*$buy){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
             //print_r("下多单");
