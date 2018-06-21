@@ -52,7 +52,7 @@ class KrangController extends Controller
     public function actionTest()
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['code'=>false,'msg'=>$msg, 'data'=>['bb']];
+        return ['code'=>false,'msg'=>"哈哈", 'data'=>['bb']];
     }
 
     public function actionIndex()
