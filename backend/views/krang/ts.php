@@ -20,7 +20,7 @@ $(function(){
 				$('#msg').html(data.msg);
 			}
 		});
-	}, 1000);
+	}, 5000);
 });
 </script>
 </body>

@@ -56,7 +56,7 @@ class KrangController extends Controller
         $cur_trade_info = $client -> tickerApi($params);
 
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['code'=>'123.'.($cur_trade_info->ticker->last??0),'msg'=>$_POST['msg'], 'data'=>['bb']];
+        return ['code'=>($cur_trade_info->ticker->last??0).'pp','msg'=>$_POST['msg'], 'data'=>['bb']];
     }
 
     public function actionIndex()
