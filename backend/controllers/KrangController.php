@@ -11,6 +11,7 @@ namespace backend\controllers;
 use backend\controllers\src\ok\OKCoin;
 use Yii;
 use yii\base\Controller;
+use yii\web\Response;
 
 class KrangController extends Controller
 {
@@ -44,14 +45,14 @@ class KrangController extends Controller
 
     public function actionTs()
     {
-	$this->layout = false;
-	return $this->render('ts');
+        $this->layout = false;
+        return $this->render('ts');
     }	
 
     public function actionTest()
     {
-	Yii::$app->response->format=Response::FORMAT_JSON;
-	return ['code'=>false,'msg'=>$msg, 'data'=>['bb']];
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return ['code'=>false,'msg'=>$msg, 'data'=>['bb']];
     }
 
     public function actionIndex()
