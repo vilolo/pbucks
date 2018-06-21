@@ -42,6 +42,18 @@ class KrangController extends Controller
         }
     }
 
+    public function actionTs()
+    {
+	$this->layout = false;
+	return $this->render('ts');
+    }	
+
+    public function actionTest()
+    {
+	Yii::$app->response->format=Response::FORMAT_JSON;
+	return ['code'=>false,'msg'=>$msg, 'data'=>['bb']];
+    }
+
     public function actionIndex()
     {
         //OKCoin DEMO 入口
