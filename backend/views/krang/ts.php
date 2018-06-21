@@ -11,8 +11,10 @@
 $(function(){	
 	window.setInterval(function(){
 		$.ajax({
-			url:'xxx',
+			url:'http://www.xyzelec.com/krang/test',
 			dataType:'json',
+            type:'post',
+            data:{msg:"嘻嘻嘻"},
 			success:function(data){
 				$('title').html(data.code);
 				$('#msg').html(data.msg);
