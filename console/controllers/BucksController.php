@@ -20,10 +20,10 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 10; //盈利10%平仓
+    const WIN_PERCENT = 12; //盈利10%平仓
     const LOST_PERCENT = -8;    //亏损20%出局
 
-    const AVAILABLE_TRADE_PERCENT = 50;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
+    const AVAILABLE_TRADE_PERCENT = 0.2;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
 
     const TRADE_OPEN_BUY = 1;
     const TRADE_OPEN_SEAL = 2;
@@ -97,7 +97,7 @@ class BucksController extends Controller
                         if (!$use_info->contracts){
                             $this->_create_order($client, $cur_trade_info);
                         }else{
-                            if ($use_info->contracts[0]->bond/$use_info->balance < 0.5){
+                            if ($use_info->contracts[0]->bond/$use_info->balance < self::AVAILABLE_TRADE_PERCENT){
                                 $this->_create_order($client, $cur_trade_info);
                             }
                         }
@@ -155,7 +155,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->sell,
                     'amount' => $arr[self::BUY_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."pb---".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."pb--".$arr[self::BUY_TYPE][1]."-".($arr[self::BUY_TYPE][2]?'yes':'no').PHP_EOL, 8);
             }
 
             if ($arr[self::SEAL_TYPE][0] == 1 && $arr[self::SEAL_TYPE][1] > 0){
@@ -166,7 +166,7 @@ class BucksController extends Controller
                     'price' => $cur_trade_info->ticker->buy,
                     'amount' => $arr[self::SEAL_TYPE][1]);
                 $client -> tradeApi($params);
-                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."ps---".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
+                file_put_contents('log/'.date("Ymd").'.txt', date("YmdHis：")."ps--".$arr[self::SEAL_TYPE][1]."-".($arr[self::SEAL_TYPE][2]?'yes':'no').PHP_EOL, 8);
 //                print_r("平空单");
 //                var_dump($result);
             }
