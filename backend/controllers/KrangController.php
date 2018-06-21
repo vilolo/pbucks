@@ -51,8 +51,12 @@ class KrangController extends Controller
 
     public function actionTest()
     {
+        $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
+        $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
+        $cur_trade_info = $client -> tickerApi($params);
+
         Yii::$app->response->format = Response::FORMAT_JSON;
-        return ['code'=>false,'msg'=>$_POST['msg'], 'data'=>['bb']];
+        return ['code'=>'123.'.($cur_trade_info->ticker->last??0),'msg'=>$_POST['msg'], 'data'=>['bb']];
     }
 
     public function actionIndex()
