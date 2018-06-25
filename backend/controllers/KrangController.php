@@ -59,6 +59,15 @@ class KrangController extends Controller
         return ['code'=>($cur_trade_info->ticker->last??0).'pp','msg'=>$_POST['msg'], 'data'=>['bb']];
     }
 
+    public function actionTest2()
+    {
+        $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
+        $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
+        $cur_trade_info = $client -> tickerApi($params);
+
+        print_r($cur_trade_info);
+    }
+
     public function actionIndex()
     {
         //OKCoin DEMO 入口
