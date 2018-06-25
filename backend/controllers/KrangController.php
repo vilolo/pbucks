@@ -69,7 +69,7 @@ class KrangController extends Controller
 
         //print_r(json_encode($cur_trade_info));
 
-        $db = new \LevelDB("/home/www/leveldb_data/test");
+        $db = new \LevelDB("./leveldb_data/test");
         $db->put('k1', json_encode($cur_trade_info));
 
         echo $db->get("k1");
