@@ -61,8 +61,6 @@ class KrangController extends Controller
 
     public function actionTest2()
     {
-        phpinfo();
-
         $client = new OKCoin(new \OKCoin_ApiKeyAuthentication($this->api_key, $this->secret_key));
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
