@@ -39,10 +39,10 @@ class StgController extends Controller
             mkdir($path, 0777);
         }
 
+        $db = new \LevelDB($path);
         while (true){
             usleep(5000);
             $cur_trade_info = $client -> tickerApi($params);
-            $db = new \LevelDB($path);
             $db->put(time(), json_encode($cur_trade_info));
         }
     }
