@@ -15,6 +15,7 @@ class StgController extends Controller
     private $api_key = "";
     private $secret_key = "";
     private $symbol = "";
+    private $contract_type = "";
 
     function init()
     {
@@ -22,6 +23,7 @@ class StgController extends Controller
         $this->api_key = Yii::$app->params['api_key'];
         $this->secret_key = Yii::$app->params['secret_key'];
         $this->symbol = Yii::$app->params['symbol'];
+        $this->contract_type = Yii::$app->params['contract_type'];
     }
 
     public function actionIndex()
