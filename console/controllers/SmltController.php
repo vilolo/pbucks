@@ -6,6 +6,9 @@
 
 namespace console\controllers;
 
+use Yii;
+use yii\base\Controller;
+
 class SmltController extends BaseController
 {
     public function actionIndex()
