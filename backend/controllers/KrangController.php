@@ -65,7 +65,7 @@ class KrangController extends Controller
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
 
-        print_r($cur_trade_info);
+        print_r(json_encode($cur_trade_info));
     }
 
     public function actionIndex()
