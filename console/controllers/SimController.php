@@ -28,9 +28,7 @@ class SimController extends Controller
 
     public function actionIndex()
     {
-        print_r("sadfasf");die();
-        $dir_name = time().'-'.rand(100,999);
-        $path = './leveldb_data/'.$dir_name;
+        $path = './leveldb_data/1529918324-271';
 
         $db = new \LevelDB($path);
         $it = new \LevelDBIterator($db);
