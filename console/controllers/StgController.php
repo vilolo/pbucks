@@ -8,6 +8,7 @@ namespace console\controllers;
 
 use Yii;
 use backend\controllers\src\ok\OKCoin;
+use yii\base\Controller;
 
 class StgController extends Controller
 {
