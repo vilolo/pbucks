@@ -10,7 +10,7 @@ use Yii;
 use backend\controllers\src\ok\OKCoin;
 use yii\base\Controller;
 
-class SmltController extends Controller
+class SimController extends Controller
 {
     private $api_key = "";
     private $secret_key = "";
