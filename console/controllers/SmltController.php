@@ -7,15 +7,15 @@
 namespace console\controllers;
 
 use Yii;
+use backend\controllers\src\ok\OKCoin;
 use yii\base\Controller;
 
 class SmltController extends Controller
 {
-    public $api_key = "";
-    public $secret_key = "";
-    public $symbol = "";
-    public $contract_type = "";
-    public $db_path = '';
+    private $api_key = "";
+    private $secret_key = "";
+    private $symbol = "";
+    private $contract_type = "";
 
     function init()
     {
@@ -24,13 +24,14 @@ class SmltController extends Controller
         $this->secret_key = Yii::$app->params['secret_key'];
         $this->symbol = Yii::$app->params['symbol'];
         $this->contract_type = Yii::$app->params['contract_type'];
-        $dir_name = time().'-'.rand(100,999);
-        $this->db_path = './leveldb_data/'.$dir_name;
     }
 
     public function actionIndex()
     {
-        $db = new \LevelDB($this->db_path);
+        $dir_name = time().'-'.rand(100,999);
+        $path = './leveldb_data/'.$dir_name;
+
+        $db = new \LevelDB($path);
         $it = new \LevelDBIterator($db);
         while($it->valid()) {
             var_dump($it->key() . " => " . $it->current() . "\n");
