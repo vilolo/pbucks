@@ -28,7 +28,7 @@ class SimController extends Controller
 
     public function actionIndex()
     {
-        $path = './leveldb_data/1529918324-271';
+        $path = './leveldb_data/1529918305-974';
 
         $db = new \LevelDB($path);
         $it = new \LevelDBIterator($db);
