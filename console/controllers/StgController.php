@@ -9,7 +9,7 @@ namespace console\controllers;
 use Yii;
 use backend\controllers\src\ok\OKCoin;
 
-class StgController
+class StgController extends Controller
 {
     private $api_key = "";
     private $secret_key = "";
