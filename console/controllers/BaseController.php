@@ -16,6 +16,9 @@ class BaseController extends Controller
     public $symbol = "";
     public $contract_type = "";
     public $db_path = '';
+    public $service_name = '';
+
+    const LOG_PATH = 'log/';
 
     function init()
     {
@@ -26,5 +29,13 @@ class BaseController extends Controller
         $this->contract_type = Yii::$app->params['contract_type'];
         $dir_name = time().'-'.rand(100,999);
         $this->db_path = './leveldb_data/'.$dir_name;
+    }
+
+    public function log($content, $file_name = null)
+    {
+        if (!$file_name){
+            $file_name = date('Ymd').'_'.($this->service_name?:"public");
+        }
+        file_put_contents(self::LOG_PATH.$file_name, '['.date('Y-m-d H:i:s').']:'.(is_array($content)||is_object($content)?print_r($content, true):$content).PHP_EOL, 8);
     }
 }
