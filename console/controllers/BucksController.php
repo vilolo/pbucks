@@ -144,8 +144,7 @@ class BucksController extends Controller
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
 
-        print_r($account_info);
-        if ($account_info){
+        if ($account_info || $account_info->sell_available > 0 || $account_info->buy_available > 0){
             $arr = $this->_handle_order_plain_a($account_info);
 
             if ($arr[self::BUY_TYPE][0] == 1 && $arr[self::BUY_TYPE][1] > 0){
@@ -184,23 +183,23 @@ class BucksController extends Controller
         if ($account_info->buy_profit_lossratio > self::WIN_PERCENT){
             //盈利
             $arr[self::BUY_TYPE][0] = 1;
-            $arr[self::BUY_TYPE][1] = $account_info->buy_amount;
+            $arr[self::BUY_TYPE][1] = $account_info->buy_available;
             $arr[self::BUY_TYPE][2] = 1;
         }elseif($account_info->buy_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::BUY_TYPE][0] = 1;
-            $arr[self::BUY_TYPE][1] = $account_info->buy_amount;
+            $arr[self::BUY_TYPE][1] = $account_info->buy_available;
         }
 
         if ($account_info->sell_profit_lossratio > self::WIN_PERCENT){
             //盈利
             $arr[self::SEAL_TYPE][0] = 1;
-            $arr[self::SEAL_TYPE][1] = $account_info->sell_amount;
+            $arr[self::SEAL_TYPE][1] = $account_info->sell_available;
             $arr[self::SEAL_TYPE][2] = 1;
         }elseif($account_info->sell_profit_lossratio < self::LOST_PERCENT){
             //割肉
             $arr[self::SEAL_TYPE][0] = 1;
-            $arr[self::SEAL_TYPE][1] = $account_info->sell_amount;
+            $arr[self::SEAL_TYPE][1] = $account_info->sell_available;
         }
 
         return $arr;
