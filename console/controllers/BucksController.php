@@ -144,6 +144,7 @@ class BucksController extends Controller
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
 
+        print_r($account_info);
         if ($account_info){
             $arr = $this->_handle_order_plain_a($account_info);
 
