@@ -144,7 +144,7 @@ class BucksController extends Controller
         $params = array('symbol' => $this->symbol, 'contract_type' => $this->contract_type);
         $cur_trade_info = $client -> tickerApi($params);
 
-        if ($account_info || $account_info->sell_available > 0 || $account_info->buy_available > 0){
+        if ($account_info && ($account_info->sell_available > 0 || $account_info->buy_available > 0)){
             $arr = $this->_handle_order_plain_a($account_info);
 
             if ($arr[self::BUY_TYPE][0] == 1 && $arr[self::BUY_TYPE][1] > 0){
