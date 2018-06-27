@@ -92,6 +92,7 @@ class BucksController extends Controller
                     //判断是否需要下单
                     $params = array('api_key' => $this->api_key);
                     $result = $client -> fixUserinfoFutureApi($params);
+                    print_r($result);
                     if ($result->info){
                         $use_info = $result->info->ltc;
                         if (!$use_info->contracts){
