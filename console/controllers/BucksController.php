@@ -216,7 +216,7 @@ class BucksController extends Controller
         //可以添加随机比例，然后看下做多做空
 
         if (!$this->is_start){
-            if (count($this->tlist) > 20){
+            if (count($this->tlist) > 40){
                 $this->is_start = true;
             }
             return ;
