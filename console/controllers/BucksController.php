@@ -23,7 +23,7 @@ class BucksController extends Controller
     const WIN_PERCENT = 8; //盈利10%平仓
     const LOST_PERCENT = -12;    //亏损20%出局
 
-    const AVAILABLE_TRADE_PERCENT = 0.1;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
+    const AVAILABLE_TRADE_PERCENT = 0.6;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
 
     const TRADE_OPEN_BUY = 1;
     const TRADE_OPEN_SEAL = 2;
@@ -222,8 +222,6 @@ class BucksController extends Controller
             return ;
         }
 
-        echo 'start'.PHP_EOL;
-
         $buy = 0;
         $sale = 0;
         foreach ($this->tlist as $k => $v){
@@ -236,11 +234,6 @@ class BucksController extends Controller
 
         //可以判断他们的比例，然后根据比例给个随机数
         $c = (10000*$buy - 10000*$sale);
-
-        echo $c.'=='.$buy.'==='.$sale.PHP_EOL;
-
-        echo $cur_data->ticker->sell.PHP_EOL;
-
         if (rand(0, $c) <= 10000*$buy){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
