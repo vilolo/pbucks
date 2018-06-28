@@ -234,7 +234,7 @@ class BucksController extends Controller
 
         //可以判断他们的比例，然后根据比例给个随机数
         $c = (10000*$buy - 10000*$sale);
-        if (rand(0, $c) <= 10000*$buy){
+        if (rand(0, $c) > 10000*$buy){
             $type = self::TRADE_OPEN_BUY;
             $price = $cur_data->ticker->sell;
             //print_r("下多单");
