@@ -20,8 +20,8 @@ class BucksController extends Controller
     const BUY_TYPE = 1;
     const SEAL_TYPE = 2;
 
-    const WIN_PERCENT = 8; //盈利10%平仓
-    const LOST_PERCENT = -12;    //亏损20%出局
+    const WIN_PERCENT = 12; //盈利10%平仓
+    const LOST_PERCENT = -8;    //亏损20%出局
 
     const AVAILABLE_TRADE_PERCENT = 0.6;     //可用金额的交易比例，由于发出下单后未马上成交，不能控制合约张数
 
